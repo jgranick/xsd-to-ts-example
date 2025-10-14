@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+           targetNamespace="http://example.com/order" 
+           xmlns:tns="http://example.com/order" 
+           elementFormDefault="qualified">
+
+  <xs:element name="Order" type="tns:OrderType"/>
+  <xs:element name="OrderList" type="tns:OrderListType"/>
+  
+  <xs:complexType name="OrderType">
+    <xs:sequence>
+      <xs:element name="orderId" type="xs:string"/>
+      <xs:element name="customerId" type="xs:integer"/>
+      <xs:element name="orderDate" type="xs:dateTime"/>
+      <xs:element name="items" type="tns:OrderItemListType"/>
+      <xs:element name="shipping" type="tns:ShippingType"/>
+      <xs:element name="payment" type="tns:PaymentType"/>
+      <xs:element name="totals" type="tns:OrderTotalsType"/>
+    </xs:sequence>
+    <xs:attribute name="status" type="tns:OrderStatusEnum" use="required"/>
+  </xs:complexType>
+
+  <xs:complexType name="OrderItemListType">
+    <xs:sequence>
+      <xs:element name="item" type="tns:OrderItemType" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="OrderItemType">
+    <xs:sequence>
+      <xs:element name="productId" type="xs:string"/>
+      <xs:element name="quantity" type="xs:integer"/>
+      <xs:element name="unitPrice" type="xs:decimal"/>
+      <xs:element name="discount" type="xs:decimal" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="ShippingType">
+    <xs:sequence>
+      <xs:element name="method" type="tns:ShippingMethodEnum"/>
+      <xs:element name="address" type="tns:AddressType"/>
+      <xs:element name="cost" type="xs:decimal"/>
+      <xs:element name="estimatedDelivery" type="xs:date" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="AddressType">
+    <xs:sequence>
+      <xs:element name="street" type="xs:string"/>
+      <xs:element name="city" type="xs:string"/>
+      <xs:element name="state" type="xs:string"/>
+      <xs:element name="zipCode" type="xs:string"/>
+      <xs:element name="country" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="PaymentType">
+    <xs:sequence>
+      <xs:element name="method" type="tns:PaymentMethodEnum"/>
+      <xs:element name="cardNumber" type="xs:string" minOccurs="0"/>
+      <xs:element name="expiryDate" type="xs:string" minOccurs="0"/>
+      <xs:element name="billingAddress" type="tns:AddressType" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="OrderTotalsType">
+    <xs:sequence>
+      <xs:element name="subtotal" type="xs:decimal"/>
+      <xs:element name="tax" type="xs:decimal"/>
+      <xs:element name="shipping" type="xs:decimal"/>
+      <xs:element name="discount" type="xs:decimal" minOccurs="0"/>
+      <xs:element name="total" type="xs:decimal"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="OrderListType">
+    <xs:sequence>
+      <xs:element name="order" type="tns:OrderType" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:simpleType name="OrderStatusEnum">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="pending"/>
+      <xs:enumeration value="confirmed"/>
+      <xs:enumeration value="shipped"/>
+      <xs:enumeration value="delivered"/>
+      <xs:enumeration value="cancelled"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="ShippingMethodEnum">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="standard"/>
+      <xs:enumeration value="express"/>
+      <xs:enumeration value="overnight"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="PaymentMethodEnum">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="credit_card"/>
+      <xs:enumeration value="debit_card"/>
+      <xs:enumeration value="paypal"/>
+      <xs:enumeration value="bank_transfer"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+</xs:schema>

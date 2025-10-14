@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+           targetNamespace="http://example.com/product" 
+           xmlns:tns="http://example.com/product" 
+           elementFormDefault="qualified">
+
+  <xs:element name="Product" type="tns:ProductType"/>
+  <xs:element name="ProductCatalog" type="tns:ProductCatalogType"/>
+  
+  <xs:complexType name="ProductType">
+    <xs:sequence>
+      <xs:element name="id" type="xs:string"/>
+      <xs:element name="name" type="xs:string"/>
+      <xs:element name="description" type="xs:string" minOccurs="0"/>
+      <xs:element name="price" type="tns:PriceType"/>
+      <xs:element name="category" type="tns:CategoryType"/>
+      <xs:element name="inventory" type="tns:InventoryType"/>
+      <xs:element name="specifications" type="tns:SpecificationListType" minOccurs="0"/>
+    </xs:sequence>
+    <xs:attribute name="status" type="tns:ProductStatusEnum" use="optional" default="active"/>
+  </xs:complexType>
+
+  <xs:complexType name="PriceType">
+    <xs:sequence>
+      <xs:element name="amount" type="xs:decimal"/>
+      <xs:element name="currency" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="CategoryType">
+    <xs:sequence>
+      <xs:element name="id" type="xs:integer"/>
+      <xs:element name="name" type="xs:string"/>
+      <xs:element name="parentCategory" type="xs:integer" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="InventoryType">
+    <xs:sequence>
+      <xs:element name="quantity" type="xs:integer"/>
+      <xs:element name="reserved" type="xs:integer" minOccurs="0"/>
+      <xs:element name="reorderLevel" type="xs:integer" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="SpecificationListType">
+    <xs:sequence>
+      <xs:element name="specification" type="tns:SpecificationType" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="SpecificationType">
+    <xs:sequence>
+      <xs:element name="name" type="xs:string"/>
+      <xs:element name="value" type="xs:string"/>
+      <xs:element name="unit" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="ProductCatalogType">
+    <xs:sequence>
+      <xs:element name="products" type="tns:ProductListType"/>
+      <xs:element name="lastUpdated" type="xs:dateTime"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="ProductListType">
+    <xs:sequence>
+      <xs:element name="product" type="tns:ProductType" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:simpleType name="ProductStatusEnum">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="active"/>
+      <xs:enumeration value="inactive"/>
+      <xs:enumeration value="discontinued"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+</xs:schema>
