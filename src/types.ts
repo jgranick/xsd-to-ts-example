@@ -10,6 +10,7 @@ export interface XSDElement {
 export interface XSDAttribute {
   name: string;
   type: string;
+  xsdType?: string;
   use?: string;
   default?: string;
 }
@@ -43,6 +44,7 @@ export interface TypeScriptInterface {
 export interface TypeScriptProperty {
   name: string;
   type: string;
+  xsdType?: string;
   optional: boolean;
   array: boolean;
 }

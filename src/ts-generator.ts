@@ -51,6 +51,7 @@ export class TypeScriptGenerator {
       properties.push({
         name: element.name,
         type: this.mapXSDTypeToTypeScript(element.type || 'string'),
+        xsdType: element.type,
         optional: element.minOccurs === '0',
         array: element.maxOccurs === 'unbounded' || (element.maxOccurs ? parseInt(element.maxOccurs) > 1 : false)
       });
@@ -61,6 +62,7 @@ export class TypeScriptGenerator {
       properties.push({
         name: attr.name,
         type: this.mapXSDTypeToTypeScript(attr.type),
+        xsdType: attr.type,
         optional: attr.use !== 'required',
         array: false
       });
@@ -136,7 +138,8 @@ export class TypeScriptGenerator {
     interface_.properties.forEach(prop => {
       const optional = prop.optional ? '?' : '';
       const array = prop.array ? '[]' : '';
-      content += `  ${prop.name}${optional}: ${prop.type}${array};\n`;
+      const xsdTypeComment = prop.xsdType ? ` /*${prop.xsdType}*/` : '';
+      content += `  ${prop.name}${optional}: ${prop.type}${array}${xsdTypeComment};\n`;
     });
     
     content += '}';
@@ -147,7 +150,7 @@ export class TypeScriptGenerator {
     let content = `export enum ${interface_.name} {\n`;
     
     interface_.enumValues?.forEach((value, index) => {
-      const enumKey = value.toUpperCase().replace(/[^A-Z0-9]/g, '_');
+      const enumKey = String(value).toUpperCase().replace(/[^A-Z0-9]/g, '_');
       content += `  ${enumKey} = '${value}'`;
       if (index < (interface_.enumValues?.length || 0) - 1) {
         content += ',';
